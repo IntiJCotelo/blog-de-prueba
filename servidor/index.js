@@ -5,9 +5,10 @@ const path = require('path');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
-const facebookStrategy = require('passport-facebook').Strategy;
+// const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 require('dotenv').config();
-const Usuario = require('./controladores/usuarios');
+const Usuario = require('./modelos/usuario');
 
 //CONEXIÓN A LA BASE DE DATOS
 mongoose.connect('mongodb://127.0.0.1:27017/blog-prueba');
@@ -49,20 +50,22 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(
-    new facebookStrategy(
+    new GoogleStrategy(
         {
             clientID: process.env.CLIENT_ID,
             clientSecret: process.env.CLIENT_SECRET,
             callbackURL: process.env.CALLBACK_URL
         },
         async (accessToken, refreshToken, profile, done) => {
-            const usuarioEncontrado = await Usuario.findOne({ facebookId: profile.id });
+            console.log(profile);
+            const usuarioEncontrado = await Usuario.findOne({ googleId: profile.id });
             if (usuarioEncontrado) {
                 return done(null, usuarioEncontrado);
             } else {
                 const nuevoUsuario = new Usuario({
                     nombre: profile.displayName,
-                    facebookId: profile.id
+                    googleId: profile.id,
+                    email: profile.emails[0].value,
                 });
                 await nuevoUsuario.save();
                 return done(null, nuevoUsuario);
@@ -76,7 +79,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((user, done) => {
-    const usuario = Usuario.finfById(user.id);
+    const usuario = Usuario.findById(user.id);
     console.log(user);
     
     done(null, user);

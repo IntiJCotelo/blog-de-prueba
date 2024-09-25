@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function CrearPublicacion() {
+function CrearPublicacion({ usuarioLogeado }) {
     useEffect(() => {
         document.querySelector('title').textContent = 'Crear publicacion';
     }, []);

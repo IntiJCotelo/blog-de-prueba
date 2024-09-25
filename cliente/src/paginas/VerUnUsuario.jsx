@@ -29,7 +29,7 @@ function VerUnUsuario() {
             <p>ID: {id}</p>
             <p>Nombre: {nombre}</p>
             <p>Email: {email}</p>
-            <p>Publicaciones: {publicaciones.length}</p>
+            {/* <p>Publicaciones: {publicaciones.length}</p> */}
             <BotonEliminarUsuario />
             <BotonEditarUsuario /> 
         </>
