@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 
-function VerPublicaciones() {
+function VerMisPublicaciones({ usuarioLogeado }) {
     const [publicaciones, setPublicaciones] = useState([]);
 
     useEffect(() => {
-        fetchPublicaciones();
+        fetchPublicacionesUsuario();
     }, []);
 
-    const fetchPublicaciones = async () => {
-        const response = await fetch('http://localhost:3000/api/publicaciones');
+    const fetchPublicacionesUsuario = async () => {
+        const response = await fetch(`http://localhost:3000/api/usuarios/${usuarioLogeado.usuario._id}/`);
         const data = await response.json();
-        setPublicaciones(data);
+        setPublicaciones(data.usuario.publicaciones);
     };
 
     const mostrarPublicaciones = () => {
@@ -28,22 +28,17 @@ function VerPublicaciones() {
         });
         return tarjetas;
     };
-
+    
     return (
         <>
-            <span 
-                className="badge text-bg-secondary"
-                style={{ marginBottom: '20px', fontSize: '20px' }}
-                >
-                Publicaciones recientes
-            </span>                   
+            <h1 style={{ textAlign: "center", marginTop: "20px", marginBottom: "40px" }}>Mis publicaciones</h1>
             <div
-                style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+                style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}
+            >
                 {mostrarPublicaciones()}
             </div>
         </>
     );
 };
 
-export default VerPublicaciones;
-
+export default VerMisPublicaciones;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -8,30 +8,46 @@ function EditarPublicacion() {
     const [texto, setTexto] = useState('');
     const navigate = useNavigate();
     
-    const manejarSubmit = async (event) => {
-        event.preventDefault();
-        
-        await fetch(`http://localhost:3000/api/publicaciones/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                titulo,
-                texto
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            setTitulo('');
-            setTexto('');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    useEffect(() => {
+        fecthPublicacionAEditar();
+    }, []);
 
-        navigate(-1);
+    const fecthPublicacionAEditar = async () => {
+        const response = await fetch(`http://localhost:3000/api/publicaciones/${id}`);
+        const data = await response.json();
+        setTitulo(data.publicacion.titulo);
+        setTexto(data.publicacion.texto);
+    }
+
+    const manejarSubmit = async (event) => {
+        if (titulo === "" || texto === "") {
+            alert("Todos los campos son obligatorios");
+            return;
+        } else {
+            event.preventDefault();
+                
+            await fetch(`http://localhost:3000/api/publicaciones/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    titulo,
+                    texto
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setTitulo('');
+                setTexto('');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            
+            navigate(-1);
+        }
     }
 
     const manejarCambio = (event) => {
@@ -45,8 +61,10 @@ function EditarPublicacion() {
 
     return (
         <>
-            <h1>Editar publicacion</h1>
-            <form onSubmit={manejarSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <h1 style={{ textAlign: "center", marginTop: "20px" }}>
+                Editar publicación
+            </h1>
+            <form onSubmit={manejarSubmit} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <input
                     type="text"
                     name="titulo"
@@ -55,7 +73,7 @@ function EditarPublicacion() {
                     autoComplete="off"
                     onChange={manejarCambio}
                     value={titulo}
-                    style={{ marginBottom: "10px", padding: "10px", border: "1px solid #ccc", borderRadius: "5px", fontSize: "16px"}} 
+                    style={{ marginBottom: "30px", marginTop: "40px", padding: "10px", width: "60%", border: "2px solid #ccc", borderRadius: "5px", fontSize: "20px"}} 
                     />
                 <textarea
                     name="texto"
@@ -64,10 +82,25 @@ function EditarPublicacion() {
                     autoComplete="off"
                     onChange={manejarCambio}
                     value={texto}
-                    style={{ marginBottom: "10px", padding: "10px", border: "1px solid #ccc", borderRadius: "5px", fontSize: "16px"}}
+                    style={{ marginBottom: "20px", padding: "10px", width: "60%", height: "300px", border: "2px solid #ccc", fontSize: "15px"}}
                     >
                 </textarea>
-                <button type="submit">Editar</button>
+                <div>
+                    <button 
+                        type="submit"
+                        className="btn btn-secondary"
+                        style={{ marginRight: "10px" }}
+                    >
+                        Guardar
+                    </button>
+                    <button
+                        className="btn btn-danger"
+                        // onClick={() => navigate(-1)}
+                        style={{ marginLeft: "10px" }}
+                    >
+                        Cancelar
+                    </button>
+                </div>
             </form>
         </>
     );

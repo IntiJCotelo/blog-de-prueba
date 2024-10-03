@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import VerPublicaciones from "./VerPublicaciones";
 
 function Inicio({ usuarioLogeado }) {
     useEffect(() => {
@@ -8,28 +9,22 @@ function Inicio({ usuarioLogeado }) {
 
     return (
         <div style={{ textAlign: "center" }}>
-            <h1>Inicio</h1>
-            {usuarioLogeado.logeado && (
-                <h5>
+            {usuarioLogeado.logeado ? (
+                <h5 style={{ marginTop: "10px" }}>
                     Bienvenido{" "}
                     <b>
                         {usuarioLogeado.usuario.nombre}
                     </b>
                 </h5>
-            )}
-            {usuarioLogeado.logeado ? (
-                <Link to={`/crear-publicacion`}>
-                    <button className="btn btn-secondary">Crear publicación</button>
-                </Link>
             ) : (
             <>
-                <h3>Bienvenido al blog del CFL 401</h3>
-                <h3>Inicia sesión o crea una cuenta para continuar</h3>
-                <Link to="/iniciar-sesion">
-                    <button className="btn btn-primary">Iniciar sesion</button>
-                </Link>
+                <h1 style={{ marginTop: "20px" }}>Bienvenido al blog del CFL 401</h1>
+                <h5>Inicia sesión o registrate para poder publicar</h5>
             </>
             )}
+            <div style={{ marginTop: "50px" }}>
+                <VerPublicaciones />
+            </div>
         </div>
     );
 }

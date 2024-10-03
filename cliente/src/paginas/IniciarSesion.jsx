@@ -3,14 +3,10 @@ import { Link } from "react-router-dom";
 import GoogleLogo from "../assets/google-logo.png";
 
 function IniciarSesion() {
-    useEffect(() => {
-        document.querySelector('title').textContent = 'Iniciar sesión';
-    }, []);
-
     return (
         <>
             <div style={{ textAlign: "center" }}>
-                <h1>Iniciar sesión con Google</h1>
+                <h1 style={{ marginBottom: "20px", marginTop: "20px" }}>Iniciar sesión con Google</h1>
                 <div className="row justify-content-center">
                     <div className="col-md-3">
                         <a

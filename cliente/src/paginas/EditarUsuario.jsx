@@ -50,8 +50,10 @@ function EditarUsuario() {
 
     return (
         <>
-            <h1>Editar usuario</h1>
-            <form onSubmit={manejarSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} >
+            <h1 style={{ textAlign: 'center', marginTop: '20px' }}>
+                Editar usuario
+            </h1>
+            <form onSubmit={manejarSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
                 <input
                     type="text"
                     name="nombre"
@@ -76,7 +78,7 @@ function EditarUsuario() {
                     onChange={manejarCambio}
                     value={password}
                     style={{  marginBottom: "10px", padding: "10px", border: "1px solid #ccc", borderRadius: "5px", fontSize: "16px"}} />
-                    <button type="submit">Editar</button>
+                    <button className="btn btn-secondary" type="submit">Guardar</button>
             </form>
         </>
     );

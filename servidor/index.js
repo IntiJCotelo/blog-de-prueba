@@ -33,10 +33,12 @@ app.use((req, res, next) => {
 });
 //CORS
 
+//EXPRESS
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
+//EXPRESS
 
 //PASSPORT Y SESSION
 app.use(
@@ -66,6 +68,7 @@ passport.use(
                     nombre: profile.displayName,
                     googleId: profile.id,
                     email: profile.emails[0].value,
+                    imagen: profile.photos[0].value
                 });
                 await nuevoUsuario.save();
                 return done(null, nuevoUsuario);
@@ -94,9 +97,8 @@ app.use("/api/usuarios", rutasUsuarios);
 const rutasPublicaciones = require("./rutas/publicaciones");
 app.use("/api/publicaciones", rutasPublicaciones);
 
-app.get('/blog', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
-});
+const rutasComentarios = require("./rutas/comentarios");
+app.use("/api/comentarios", rutasComentarios);
 //RUTAS
 
 app.listen(3000, () => {

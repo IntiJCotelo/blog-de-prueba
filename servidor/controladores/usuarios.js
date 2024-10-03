@@ -1,5 +1,6 @@
 const Usuario = require('../modelos/usuario')
 const Publicacion = require('../modelos/publicacion');
+const Comentario = require('../modelos/comentario');
 const { authenticate } = require('passport');
 
 const crearUsuario = async (req, res) => {
@@ -16,7 +17,9 @@ const verUsuarios = async (req, res) => {
 
 const verUsuario = async (req, res) => {
     const { id } = req.params;
-    const usuario = await Usuario.findById(id);
+    const usuario = await Usuario.findById(id)    
+        .populate('publicaciones')
+        .populate('comentarios');
     res.json({ usuario });
 };
 
@@ -37,7 +40,16 @@ const eliminarUsuario = async (req, res) => {
     const publicaciones = await Publicacion.deleteMany({
         usuario: id
     });
-    res.json({ usuario, mensaje: "Usuario eliminado" });
+    const comentarios = await Comentario.deleteMany({
+        usuario: id
+    });
+    req.logout((err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json({ logeado: false, usuario: {}, mensaje: "Usuario eliminado" });
+        }
+    });
 };
 
 const autenticarUsuario = async (req, res) => {
@@ -47,7 +59,6 @@ const autenticarUsuario = async (req, res) => {
         }
 
         res.redirect('http://localhost:5173/');
-        // res.json({ logeado: true, usuario: req.user, mensaje: "Usuario autenticado" });
     });    
 };
 

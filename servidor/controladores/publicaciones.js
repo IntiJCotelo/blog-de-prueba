@@ -5,9 +5,9 @@ const crearPublicacion = async (req, res) => {
     const { usuario, titulo, texto } = req.body;
     const publicacion = new Publicacion({ usuario, titulo, texto });
     await publicacion.save();
-    //const usuarioActual = await Usuario.findById(usuario);
-    //usuarioActual.publicaciones.push(publicacion);
-    //await usuarioActual.save();
+    const usuarioActual = await Usuario.findById(usuario);
+    usuarioActual.publicaciones.push(publicacion);
+    await usuarioActual.save();
     res.json({ publicacion, mensaje: "Publicacion creada"});
 };
 
@@ -18,7 +18,15 @@ const verPublicaciones = async (req, res) => {
 
 const verPublicacion = async (req, res) => {
     const { id } = req.params;
-    const publicacion = await Publicacion.findById(id)//.populate("usuario");
+    const publicacion = await Publicacion.findById(id)
+        .populate("usuario")
+        .populate({
+            path: "comentarios",
+            populate: {
+                path: "usuario"
+            }}
+        );
+
     res.json({ publicacion });
 };
 
