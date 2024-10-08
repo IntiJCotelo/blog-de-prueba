@@ -9,7 +9,7 @@ function VerPublicacion({ usuarioLogeado }) {
     const [titulo, setTitulo] = useState('');
     const [texto, setTexto] = useState('');
     const [usuario, setUsuario] = useState({});	
-    const [idUsuario, setIdUsuario] = useState('');
+    const [comentarios, setComentarios] = useState([]);
     const navigate = useNavigate();
 
 
@@ -23,8 +23,7 @@ function VerPublicacion({ usuarioLogeado }) {
         
         setTitulo(data.publicacion.titulo);
         setTexto(data.publicacion.texto);
-        // setUsuario(data.publicacion.usuario.nombre);
-        setIdUsuario(data.publicacion.usuario._id);
+        setComentarios(data.publicacion.comentarios);
         
         await fetchDataUsuario(data.publicacion.usuario._id);
     };
@@ -37,7 +36,7 @@ function VerPublicacion({ usuarioLogeado }) {
     }
 
     const botonesAcciones = () => {
-        if (usuarioLogeado.logeado && usuarioLogeado.usuario._id === idUsuario) {
+        if (usuarioLogeado.logeado && usuarioLogeado.usuario._id === usuario._id) {
             return ( 
                 <div
                     style={{
@@ -99,6 +98,34 @@ function VerPublicacion({ usuarioLogeado }) {
         .catch((err) => console.log(err));
     }
     
+    const verComentarios = () => {
+        if (comentarios.length === 0) {
+            return (
+                <h1 style={{ marginTop: '20px', marginBottom: '20px', fontSize: '15px', textAlign: 'center' }}>
+                    Aún no hay comentarios en esta publicación. <br /> 
+                    ¡Sé el primero en comentar!
+                </h1>
+            )
+        } else {
+            return (
+                <>
+                    {comentarios.map((comentario, index) => (
+                        <div key={index} style={{ }} >
+                            <img
+                                style={{ width: '30px', height: 'auto', borderRadius: '50%' }} 
+                                src={comentario.usuario.imagen} 
+                                alt="" 
+                            />
+                            <div style={{ marginLeft: '10px', display: 'inline-block' }}>
+                                <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>{comentario.usuario.nombre}</p>
+                                <p>{comentario.texto}</p>
+                            </div>
+                        </div>
+                    ))}
+                </>
+            )
+        }
+    }
     
     return (
         <>
@@ -117,16 +144,18 @@ function VerPublicacion({ usuarioLogeado }) {
             <div>
                 {usuarioLogeado.logeado ? (
                     <div>
-                        <h1>Comentarios</h1>
+                        <h1 style={{ marginTop: '20px', marginBottom: '20px', fontSize: '25px', textAlign: 'center' }}>Comentarios</h1>
                         <CrearComentario imagenUsuario={usuario.imagen} fetchCrearComentario={fetchCrearComentario} />
                     </div>
                 ) : (
-                    <div>
-                        <h1>Comentarios</h1>
-                        <Link to="/iniciar-sesion">Inicia sesión o registrate para poder comentar</Link>
+                    <div style={{ textAlign: 'center' }}>
+                        <h1 style={{ marginTop: '20px', marginBottom: '20px', fontSize: '25px'}}>Comentarios</h1>
+                        <Link to="/iniciar-sesion">
+                            Inicia sesión o registrate para poder comentar
+                        </Link>
                     </div>
                 )}
-
+                {verComentarios()}
             </div>
         </>  
     );
