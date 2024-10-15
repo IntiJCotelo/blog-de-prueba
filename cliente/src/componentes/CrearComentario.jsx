@@ -17,7 +17,7 @@ function CrearComentario({ imagenUsuario, fetchCrearComentario }) {
         <>
             <div 
                 className="input-group mb-3"
-                style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "40px" }}
             >
                 <img 
                     style={{ width: "35px", height: "35px", borderRadius: "50%", marginRight: "10px" }}

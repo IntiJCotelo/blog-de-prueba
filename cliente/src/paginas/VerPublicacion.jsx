@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import CrearComentario from "../componentes/CrearComentario";
+import AccionesComentarios from "../componentes/AccionesComentarios";
 
 function VerPublicacion({ usuarioLogeado }) {
     const { id } = useParams();
@@ -11,7 +12,6 @@ function VerPublicacion({ usuarioLogeado }) {
     const [usuario, setUsuario] = useState({});	
     const [comentarios, setComentarios] = useState([]);
     const navigate = useNavigate();
-
 
     useEffect(() => {
         fetchPublicacion();
@@ -31,7 +31,6 @@ function VerPublicacion({ usuarioLogeado }) {
     const fetchDataUsuario = async (idUsuario) => {
         const response = await fetch(`http://localhost:3000/api/usuarios/${idUsuario}`);
         const data = await response.json();
-        console.log(data.usuario);
         setUsuario(data.usuario);
     }
 
@@ -109,19 +108,29 @@ function VerPublicacion({ usuarioLogeado }) {
         } else {
             return (
                 <>
-                    {comentarios.map((comentario, index) => (
-                        <div key={index} style={{ }} >
-                            <img
-                                style={{ width: '30px', height: 'auto', borderRadius: '50%' }} 
-                                src={comentario.usuario.imagen} 
-                                alt="" 
-                            />
-                            <div style={{ marginLeft: '10px', display: 'inline-block' }}>
-                                <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>{comentario.usuario.nombre}</p>
-                                <p>{comentario.texto}</p>
-                            </div>
+                    <div className="row">
+                        <div className="col-4"></div>
+                        <div className="col-4" >
+                            {comentarios.map((comentario, index) => (
+                                <div key={index} style={{ textAlign: 'left' }} >
+                                    <img
+                                        style={{ width: '30px', height: 'auto', borderRadius: '50%' }} 
+                                        src={comentario.usuario.imagen} 
+                                        alt="" 
+                                    />
+                                    <div style={{ marginLeft: '10px', display: 'inline-block' }} >
+                                        <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>{comentario.usuario.nombre}</p>
+                                        <p>{comentario.texto}</p>
+                                    </div>
+                                    <div style={{ float: 'right' }}>
+                                        {(usuarioLogeado.logeado && usuarioLogeado.usuario._id === comentario.usuario._id) && (
+                                            <AccionesComentarios idComentario={comentario._id} fetchPublicacion={fetchPublicacion}/>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
                 </>
             )
         }
@@ -145,7 +154,7 @@ function VerPublicacion({ usuarioLogeado }) {
                 {usuarioLogeado.logeado ? (
                     <div>
                         <h1 style={{ marginTop: '20px', marginBottom: '20px', fontSize: '25px', textAlign: 'center' }}>Comentarios</h1>
-                        <CrearComentario imagenUsuario={usuario.imagen} fetchCrearComentario={fetchCrearComentario} />
+                        <CrearComentario imagenUsuario={usuarioLogeado.usuario.imagen} fetchCrearComentario={fetchCrearComentario} />
                     </div>
                 ) : (
                     <div style={{ textAlign: 'center' }}>
