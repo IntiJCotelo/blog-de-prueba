@@ -1,10 +1,19 @@
 import Puntitos from '../assets/puntitos.png'
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 
 function AccionesComentarios({ idComentario, fetchPublicacion }) {
+    const [mostrarModal, setMostrarModal] = useState(false);
     
-    
+    const abrirModalEditar = () => {
+
+        return (
+            <div 
+                class="modal"
+                style={{ display: mostrarModal ? 'block' : 'none' }}
+            >
+            </div>
+        )
+    }    
 
     const eliminarComentario = () => {
         const confirmEliminar = confirm("¿Desea eliminar este comentario?");
@@ -29,6 +38,13 @@ function AccionesComentarios({ idComentario, fetchPublicacion }) {
 
     return (
         <>
+            <div 
+                className="modal"
+                style={{ display: mostrarModal ? 'block' : 'none' }}
+            >
+            
+                <button onClick={() => setMostrarModal(false)}>Cerrar</button>
+            </div>
             <div className="dropdown">
                 <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img 
@@ -39,7 +55,7 @@ function AccionesComentarios({ idComentario, fetchPublicacion }) {
                 </a>
                 <ul className="dropdown-menu">
                     <li>
-                        <button className="dropdown-item" href="#" >Editar</button>
+                        <button className="dropdown-item" href="#" onClick={() => setMostrarModal(true)}>Editar</button>
                     </li>
                     <li>
                         <button className="dropdown-item" href="#" onClick={eliminarComentario}>Eliminar</button>
