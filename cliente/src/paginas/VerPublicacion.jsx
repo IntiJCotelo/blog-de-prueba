@@ -124,7 +124,7 @@ function VerPublicacion({ usuarioLogeado }) {
                                     </div>
                                     <div style={{ float: 'right' }}>
                                         {(usuarioLogeado.logeado && usuarioLogeado.usuario._id === comentario.usuario._id) && (
-                                            <AccionesComentarios idComentario={comentario._id} fetchPublicacion={fetchPublicacion}/>
+                                            <AccionesComentarios idComentario={comentario._id} textoComentario={comentario.texto} fetchPublicacion={fetchPublicacion}/>
                                         )}
                                     </div>
                                 </div>
