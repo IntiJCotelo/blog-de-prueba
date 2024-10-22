@@ -108,7 +108,7 @@ function VerPublicacion({ usuarioLogeado }) {
         } else {
             return (
                 <>
-                    <div className="row">
+                    <div className="row" style={{ marginTop: '25px' }}>
                         <div className="col-4"></div>
                         <div className="col-4" >
                             {comentarios.map((comentario, index) => (
@@ -159,7 +159,7 @@ function VerPublicacion({ usuarioLogeado }) {
                 ) : (
                     <div style={{ textAlign: 'center' }}>
                         <h1 style={{ marginTop: '20px', marginBottom: '20px', fontSize: '25px'}}>Comentarios</h1>
-                        <Link to="/iniciar-sesion">
+                        <Link to="/iniciar-sesion"> 
                             Inicia sesión o registrate para poder comentar
                         </Link>
                     </div>

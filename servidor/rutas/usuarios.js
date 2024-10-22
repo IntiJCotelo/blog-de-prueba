@@ -12,20 +12,43 @@ const {
     usuarioLogeado,
     desconectarUsuario
 } = require("../controladores/usuarios");
+const { validarUsuario } = require("../validaciones/validaciones");
+const { estaLogeado, esAdmin, esUsuario } = require("../middlewares");
 
-router.get ("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get (
+    "/google", 
+    passport.authenticate("google", 
+        { scope: ["profile", "email"] }
+    )
+);
 
-router.get("/google/autenticar", 
-    passport.authenticate("google", { scope: ["profile", "email"] }),
+router.get(
+    "/google/autenticar", 
+    passport.authenticate("google", 
+        { scope: ["profile", "email"] }
+    ),
     autenticarUsuario
 );
 
-router.get("/", verUsuarios);
+router
+    .route("/")
+    .get(verUsuarios)
+    .post(validarUsuario, crearUsuario)
+
+router
+    .route("/:id")
+    .get(verUsuario)
+    .put(estaLogeado, esUsuario, editarUsuario)
+    .delete(estaLogeado, esUsuario, eliminarUsuario);
+
 router.get("/usuario-logeado", usuarioLogeado)
 router.get("/desconectarse", desconectarUsuario)
-router.get("/:id", verUsuario);
-router.post("/", crearUsuario);
-router.put("/:id", editarUsuario);
-router.delete("/:id", eliminarUsuario);
+
+// router.get("/", verUsuarios);
+// router.post("/", crearUsuario);
+
+// router.get("/:id", verUsuario);
+// router.put("/:id", editarUsuario);
+// router.delete("/:id", eliminarUsuario);
 
 module.exports = router;
