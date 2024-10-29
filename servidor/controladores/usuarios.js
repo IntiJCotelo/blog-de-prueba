@@ -80,6 +80,14 @@ const desconectarUsuario = async (req, res) => {
     });
 };
 
+const hacerAdmin = async (req, res) => {
+    const { id } = req.params;
+    const usuario = await Usuario.findById(id);
+    usuario.esAdmin = true;
+    await usuario.save();
+    res.json({ usuario, mensaje: "Usuario administrador" });
+};
+
 module.exports= {
     crearUsuario,
     verUsuarios,
@@ -88,5 +96,6 @@ module.exports= {
     eliminarUsuario,
     autenticarUsuario,
     usuarioLogeado,
-    desconectarUsuario
+    desconectarUsuario,
+    hacerAdmin
 }

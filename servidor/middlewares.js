@@ -3,9 +3,11 @@ const Publicacion = require('./modelos/publicacion');
 const Comentarios = require('./modelos/comentario');
 
 const estaLogeado = (req, res, next) => {
+    console.log("Tiene que aparecer esto");
     if (req.isAuthenticated()) {
         next();
     } else {
+        console.log("No estás logeado");
         res.status(403).json({ msg: "No has iniciado sesión" });
     }
 }

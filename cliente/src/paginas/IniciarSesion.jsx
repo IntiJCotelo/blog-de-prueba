@@ -1,10 +1,18 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import GoogleLogo from "../assets/google-logo.png";
+import { useLocation } from "react-router-dom";
 
 function IniciarSesion() {
+    const state = useLocation();
+
     return (
         <>
+            {state ? (
+                <div className="alert alert-warning" role="alert">
+                    {state.alerta}
+                </div>
+            ) : (
+                ""
+            )}
             <div style={{ textAlign: "center" }}>
                 <h1 style={{ marginBottom: "20px", marginTop: "20px" }}>Iniciar sesión con Google</h1>
                 <div className="row justify-content-center">

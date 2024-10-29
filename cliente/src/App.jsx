@@ -1,5 +1,5 @@
 // import './App.css'
-import { Routes, Route, useParams } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './UseAuth';
 
 // COMPONENTES
@@ -26,6 +26,30 @@ import VerMisPublicaciones from './paginas/VerMisPublicaciones.jsx';
 import EditarPublicacion from './paginas/EditarPublicacion.jsx'
 //PUBLICACIONES
 
+const RutaProtegidaLogeado = ({ children }) => {
+  const { usuarioLogeado, cargando } = useAuth();
+  if (cargando) {
+    return <h1>Cargando...</h1>;
+  }
+  return usuarioLogeado.logeado ? (
+    children
+  ) : (
+    <Navigate to='/iniciar-sesion' state={{ alerta: "Debes iniciar sesión o registrarte"}}/>
+  )
+}
+
+const RutaProtegidaAdmin = ({ children }) => {
+  const { usuarioLogeado, cargando } = useAuth();
+  if (cargando) {
+    return <h1>Cargando...</h1>;
+  }
+  return usuarioLogeado.logeado && usuarioLogeado.esAdmin ? (
+    children
+  ) : (
+    <Navigate to='/iniciar-sesion' state={{ alerta: "No tienes los permisos necesarios"}}/>
+  )
+}
+
 function App() {
   const { usuarioLogeado, setUsuarioLogeado } = useAuth();
 
@@ -39,17 +63,45 @@ function App() {
         <Route path='/' element={<Inicio usuarioLogeado={usuarioLogeado} />} />
         {/* USUARIOS */}
         <Route path='/iniciar-sesion' element={<IniciarSesion />} />
-        <Route path='/ver-usuarios' element={<VerUsuarios />} />
+        <Route 
+          path='/ver-usuarios' 
+          element={
+            <RutaProtegidaAdmin>
+              <VerUsuarios />
+            </RutaProtegidaAdmin>
+          } 
+        />
         <Route path='/ver-usuarios/:id' element={<VerUnUsuario />} />
-        <Route path='/ver-usuarios/editar/:id' element={<EditarUsuario />} />  
+        <Route 
+          path='/ver-usuarios/editar/:id' 
+          element={
+            <RutaProtegidaLogeado>
+              <EditarUsuario />
+            </RutaProtegidaLogeado>
+          } 
+        />  
         <Route path='/mi-usuario' element={<VerMiUsuario usuarioLogeado={usuarioLogeado} setUsuarioLogeado={setUsuarioLogeado} />} />
         {/* USUARIOS */}
         {/* PUBLICACIONES */}
-        <Route path='/crear-publicacion' element={<CrearPublicacion usuarioLogeado={usuarioLogeado}/>} />
+        <Route 
+          path='/crear-publicacion' 
+          element={
+            <RutaProtegidaLogeado>
+              <CrearPublicacion usuarioLogeado={usuarioLogeado}/>
+            </RutaProtegidaLogeado>
+          } 
+        />
         <Route path='/ver-publicaciones' element={<VerPublicaciones />} />
         <Route path='/ver-publicaciones/:id' element={<VerPublicacion usuarioLogeado={usuarioLogeado} />} />
         <Route path='/mis-publicaciones' element={<VerMisPublicaciones usuarioLogeado={usuarioLogeado} />} />
-        <Route path='/ver-publicaciones/editar/:id' element={<EditarPublicacion />} />
+        <Route 
+          path='/ver-publicaciones/editar/:id' 
+          element={
+            <RutaProtegidaLogeado>
+              <EditarPublicacion />
+            </RutaProtegidaLogeado>
+          } 
+        />
         {/* PUBLICACIONES */}  
       </Routes>
     </>

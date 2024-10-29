@@ -17,8 +17,5 @@ router
     .put(estaLogeado, esAutorComentario, editarComentario)
     .delete(estaLogeado, esAutorComentario, eliminarComentario)    
 
-// router.post("/", crearComentario);
-// router.delete("/:id", eliminarComentario);
-// router.put("/:id", editarComentario);
 
 module.exports = router;
