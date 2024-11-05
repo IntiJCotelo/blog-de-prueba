@@ -5,7 +5,8 @@ const {
     verPublicacion,
     crearPublicacion,
     editarPublicacion,
-    eliminarPublicacion
+    eliminarPublicacion,
+    likearPublicacion
 } = require("../controladores/publicaciones");
 const { validarPublicacion } = require("../validaciones/validaciones")
 const { estaLogeado, esAutorPublicacion } = require("../middlewares")
@@ -21,5 +22,8 @@ router
     .put(estaLogeado, esAutorPublicacion, editarPublicacion)
     .delete(estaLogeado, esAutorPublicacion, eliminarPublicacion)
 
+router
+    .route("/like/:id")
+    .post(estaLogeado, likearPublicacion)
 
 module.exports = router

@@ -2,12 +2,12 @@ import GoogleLogo from "../assets/google-logo.png";
 import { useLocation } from "react-router-dom";
 
 function IniciarSesion() {
-    const state = useLocation();
+    const { state } = useLocation();
 
     return (
         <>
             {state ? (
-                <div className="alert alert-warning" role="alert">
+                <div className="alert alert-warning" role="alert" style={{ textAlign: "center" }}>
                     {state.alerta}
                 </div>
             ) : (

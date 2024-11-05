@@ -8,7 +8,8 @@ const usuarioSchema = new Schema({
     esAdmin: { type: Boolean, default: false },
     googleId: { type: String, unique: true },
     publicaciones: [{ type: Schema.Types.ObjectId, ref: 'Publicacion' }],
-    comentarios: [{ type: Schema.Types.ObjectId, ref: 'Comentario' }]
+    comentarios: [{ type: Schema.Types.ObjectId, ref: 'Comentario' }],
+    likes: [{ type: Schema.Types.ObjectId, ref: 'Publicacion' }],
 });
 
 module.exports = mongoose.model('Usuario', usuarioSchema)

@@ -11,6 +11,7 @@ function VerPublicacion({ usuarioLogeado }) {
     const [texto, setTexto] = useState('');
     const [usuario, setUsuario] = useState({});	
     const [comentarios, setComentarios] = useState([]);
+    const [likes, setLikes] = useState([]);	
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,6 +25,7 @@ function VerPublicacion({ usuarioLogeado }) {
         setTitulo(data.publicacion.titulo);
         setTexto(data.publicacion.texto);
         setComentarios(data.publicacion.comentarios);
+        setLikes(data.publicacion.likes);
         
         await fetchDataUsuario(data.publicacion.usuario._id);
     };
@@ -135,6 +137,24 @@ function VerPublicacion({ usuarioLogeado }) {
             )
         }
     }
+
+    const fetchCrearLike = async () => {
+        await fetch (`http://localhost:3000/api/publicaciones/like/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                usuario: usuarioLogeado.usuario._id,
+                publicacion: id
+            })
+        })
+        .then((res) => {
+            fetchPublicacion();
+        })
+        .catch((err) => console.log(err));
+    }
     
     return (
         <>
@@ -149,6 +169,19 @@ function VerPublicacion({ usuarioLogeado }) {
                     {texto}
                 </p>
                 {botonesAcciones()}
+            </div>
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                <p><b>{likes.length} me gusta</b></p>
+                {usuarioLogeado.logeado && (
+                    <div>
+                        <button 
+                            className="btn btn-primary"
+                            onClick={fetchCrearLike}
+                        >
+                            Me gusta
+                        </button>
+                    </div>
+                )}
             </div>
             <div>
                 {usuarioLogeado.logeado ? (
